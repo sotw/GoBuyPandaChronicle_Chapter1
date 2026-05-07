@@ -31,6 +31,12 @@ func _on_gameover_pressed():
 		restart_game()
 
 func _process(delta):
+	if Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("ui_select"):
+		if game_state == GameState.TITLE:
+			start_game()
+		elif game_state == GameState.GAMEOVER:
+			restart_game()
+	
 	match game_state:
 		GameState.PLAYING:
 			game_time += delta
