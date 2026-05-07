@@ -36,6 +36,12 @@ func _unhandled_input(event):
 			start_game()
 		elif game_state == GameState.GAMEOVER:
 			restart_game()
+	
+	if event is InputEventScreenTouch and event.pressed:
+		if game_state == GameState.TITLE:
+			start_game()
+		elif game_state == GameState.GAMEOVER:
+			restart_game()
 
 func _input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseMotion:
