@@ -92,7 +92,41 @@ body {
 		</style>
 		<link id="-gd-engine-icon" rel="icon" type="image/png" href="index.icon.png" />
 <link rel="apple-touch-icon" href="index.apple-touch-icon.png"/>
-<style>canvas { touch-action: none; }</style>
+<script>
+document.addEventListener('touchstart', function(e) {
+	e.preventDefault();
+	for (var i = 0; i < e.changedTouches.length; i++) {
+		var t = e.changedTouches[i];
+		var m = new MouseEvent('mousedown', {
+			clientX: t.clientX, clientY: t.clientY,
+			button: 0, bubbles: true
+		});
+		t.target.dispatchEvent(m);
+	}
+}, {passive: false});
+document.addEventListener('touchend', function(e) {
+	e.preventDefault();
+	for (var i = 0; i < e.changedTouches.length; i++) {
+		var t = e.changedTouches[i];
+		var m = new MouseEvent('mouseup', {
+			clientX: t.clientX, clientY: t.clientY,
+			button: 0, bubbles: true
+		});
+		t.target.dispatchEvent(m);
+	}
+}, {passive: false});
+document.addEventListener('touchmove', function(e) {
+	e.preventDefault();
+	for (var i = 0; i < e.changedTouches.length; i++) {
+		var t = e.changedTouches[i];
+		var m = new MouseEvent('mousemove', {
+			clientX: t.clientX, clientY: t.clientY,
+			bubbles: true
+		});
+		t.target.dispatchEvent(m);
+	}
+}, {passive: false});
+</script>
 	</head>
 	<body>
 		<canvas id="canvas">
