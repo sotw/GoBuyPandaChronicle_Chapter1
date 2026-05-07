@@ -7,7 +7,7 @@ var collision_radius = 8.0
 
 func _ready():
 	sprite = Sprite2D.new()
-	sprite.texture = load("res://bullet.png")
+	sprite.texture = load("res://money.png")
 	add_child(sprite)
 
 func _process(delta):

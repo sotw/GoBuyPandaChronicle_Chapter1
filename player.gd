@@ -9,9 +9,13 @@ var can_shoot = true
 var shoot_delay = 0.33
 var invincible = false
 var invincible_time = 2.0
+var sprite
 
 func _ready():
 	screen_size = get_viewport_rect().size
+	sprite = Sprite2D.new()
+	sprite.texture = load("res://panda.png")
+	add_child(sprite)
 
 func _process(delta):
 	var velocity = Vector2.ZERO
