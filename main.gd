@@ -1,0 +1,116 @@
+extends Node2D
+
+enum GameState { TITLE, PLAYING, GAMEOVER }
+
+var game_state = GameState.TITLE
+var score = 0
+var lives = 3
+var spawn_timer = 0.0
+var spawn_delay = 2.0
+var game_time = 0.0
+var space_pressed = false
+var restart_pressed = false
+
+var player_scene = preload("res://player.tscn")
+var enemy_scene = preload("res://enemy.tscn")
+var player
+var screen_size
+
+func _ready():
+	screen_size = get_viewport_rect().size
+	$CanvasLayer/HUD.visible = false
+	$CanvasLayer/GameOver.visible = false
+
+func _input(event):
+	if event is InputEventKey and event.pressed:
+		if game_state == GameState.TITLE and event.keycode == KEY_SPACE and not space_pressed:
+			space_pressed = true
+			start_game()
+		elif game_state == GameState.GAMEOVER and event.keycode == KEY_SPACE and not restart_pressed:
+			restart_pressed = true
+			restart_game()
+
+func _process(delta):
+	if not Input.is_key_pressed(KEY_SPACE):
+		space_pressed = false
+		restart_pressed = false
+	
+	match game_state:
+		GameState.PLAYING:
+			game_time += delta
+			spawn_timer += delta
+			if spawn_timer >= spawn_delay:
+				spawn_enemy()
+				spawn_timer = 0
+				spawn_delay = max(0.5, 2.0 - (game_time / 30.0))
+
+func start_game():
+	game_state = GameState.PLAYING
+	score = 0
+	lives = 3
+	spawn_timer = 0.0
+	spawn_delay = 2.0
+	game_time = 0.0
+	
+	$CanvasLayer/Title.visible = false
+	$CanvasLayer/HUD.visible = true
+	$CanvasLayer/GameOver.visible = false
+	
+	player = player_scene.instantiate()
+	player.position = Vector2(screen_size.x / 2, screen_size.y - 40)
+	player.add_to_group("player")
+	player.hit.connect(_on_player_hit)
+	add_child(player)
+
+func restart_game():
+	for node in get_tree().get_nodes_in_group("enemies"):
+		node.queue_free()
+	for node in get_tree().get_nodes_in_group("player_bullets"):
+		node.queue_free()
+	for node in get_tree().get_nodes_in_group("enemy_bullets"):
+		node.queue_free()
+	if player:
+		player.queue_free()
+	start_game()
+
+func spawn_enemy():
+	var enemy = enemy_scene.instantiate()
+	var rand_x = randf_range(20, screen_size.x - 20)
+	enemy.position = Vector2(rand_x, -20)
+	
+	var type_rng = randf()
+	if type_rng < 0.6:
+		enemy.set_type(0)
+	elif type_rng < 0.85:
+		enemy.set_type(1)
+	else:
+		enemy.set_type(2)
+	
+	enemy.add_to_group("enemies")
+	enemy.area_entered.connect(_on_enemy_area_entered)
+	add_child(enemy)
+
+func _on_enemy_area_entered(area):
+	if area.is_in_group("player_bullets"):
+		var enemy = area.get_parent()
+		if enemy.is_in_group("enemies"):
+			match enemy.type:
+				0: score += 10
+				1: score += 25
+				2: score += 50
+			enemy.queue_free()
+			area.queue_free()
+			$CanvasLayer/HUD.update_score(score)
+
+func _on_player_hit():
+	lives -= 1
+	$CanvasLayer/HUD.update_lives(lives)
+	if lives <= 0:
+		game_over()
+
+func game_over():
+	game_state = GameState.GAMEOVER
+	if player:
+		player.queue_free()
+	$CanvasLayer/GameOver.visible = true
+	$CanvasLayer/GameOver/FinalScore.text = "SCORE: " + str(score)
