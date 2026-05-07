@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bill"
-path="res://.godot/imported/bill.png-8a8d213787774584ada2bada04c13b5e.ctex"
+uid="uid://receipt"
+path="res://.godot/imported/receipt.png-abcdef1234567890abcdef.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://bill.png"
-dest_files=["res://.godot/imported/bill.png-8a8d213787774584ada2bada04c13b5e.ctex"]
+source_file="res://receipt.png"
+dest_files=["res://.godot/imported/receipt.png-abcdef1234567890abcdef.ctex"]
 
 [params]
 

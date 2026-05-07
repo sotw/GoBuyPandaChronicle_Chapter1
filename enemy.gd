@@ -11,7 +11,7 @@ func _ready():
 	screen_size = get_viewport_rect().size
 	start_x = position.x
 	var sprite = Sprite2D.new()
-	sprite.texture = load("res://bill.png")
+	sprite.texture = load("res://receipt.png")
 	add_child(sprite)
 
 func _process(delta):
