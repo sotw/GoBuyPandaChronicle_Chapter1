@@ -31,13 +31,7 @@ func _process(delta):
 				spawn_delay = max(0.5, 2.0 - (game_time / 30.0))
 
 func _unhandled_input(event):
-	var pressed = false
-	if event is InputEventMouseButton:
-		pressed = event.pressed
-	elif event is InputEventScreenTouch:
-		pressed = event.pressed
-	
-	if pressed:
+	if event.is_action_pressed("ui_accept"):
 		if game_state == GameState.TITLE:
 			start_game()
 		elif game_state == GameState.GAMEOVER:
