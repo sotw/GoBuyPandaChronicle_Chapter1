@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://receipt"
-path="res://.godot/imported/receipt.png-a05ce52e7b9795e91bcc65979c1c3561.ctex"
+uid="uid://panda2"
+path="res://.godot/imported/panda2.png-9876543210abcdef.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://receipt.png"
-dest_files=["res://.godot/imported/receipt.png-a05ce52e7b9795e91bcc65979c1c3561.ctex"]
+source_file="res://panda2.png"
+dest_files=["res://.godot/imported/panda2.png-9876543210abcdef.ctex"]
 
 [params]
 
