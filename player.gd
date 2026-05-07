@@ -9,17 +9,13 @@ var can_shoot = true
 var shoot_delay = 0.33
 var invincible = false
 var invincible_time = 2.0
-var anim_sprite
+var sprite
 
 func _ready():
 	screen_size = get_viewport_rect().size
-	anim_sprite = AnimatedSprite2D.new()
-	anim_sprite.sprite_frames = SpriteFrames.new()
-	anim_sprite.sprite_frames.add_frame("default", load("res://panda2.png"))
-	anim_sprite.sprite_frames.add_frame("default", load("res://panda.png"))
-	anim_sprite.speed_scale = 2.0
-	anim_sprite.play("default")
-	add_child(anim_sprite)
+	sprite = Sprite2D.new()
+	sprite.texture = load("res://panda.png")
+	add_child(sprite)
 
 func _process(delta):
 	var velocity = Vector2.ZERO
@@ -69,10 +65,10 @@ func blink_effect():
 	invincible = true
 	var tween = create_tween()
 	for i in range(6):
-		tween.tween_property(anim_sprite, "modulate:a", 0.3, 0.15)
-		tween.tween_property(anim_sprite, "modulate:a", 1.0, 0.15)
+		tween.tween_property(sprite, "modulate:a", 0.3, 0.15)
+		tween.tween_property(sprite, "modulate:a", 1.0, 0.15)
 	tween.tween_callback(_on_blink_done)
 
 func _on_blink_done():
 	invincible = false
-	anim_sprite.modulate.a = 1.0
+	sprite.modulate.a = 1.0
