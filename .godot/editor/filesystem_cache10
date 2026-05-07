@@ -1,5 +1,5 @@
 72322a848ab928aa5c89f0cb78209805
-::res://::1778197704
+::res://::1778197866
 bill.png::CompressedTexture2D::48937::1778195657::1778195657::1::::<><><>0<>0<>b4e5929ed370fa45ab5131bd74723ad4<>res://.godot/imported/bill.png-8a8d213787774584ada2bada04c13b5e.ctex::
 bullet.gd::GDScript::396722881076620353::1778195657::0::1::::<>Node2D<><>0<>0<><>::
 bullet.png::CompressedTexture2D::2496116201299631807::1778195657::1778195657::1::::<><><>0<>0<>0d3ab7b34a72f4f80ef01169daace133<>res://.godot/imported/bullet.png-ff1424653e10246c11e3724e402c519e.ctex::
@@ -12,10 +12,10 @@ enemy.tscn::PackedScene::5861352::1778195657::0::1::::<><><>0<>0<><>::res://enem
 enemy_bullet.png::CompressedTexture2D::4472936516753916823::1778195657::1778195657::1::::<><><>0<>0<>4811d00adbf61f3582bc87d8f9834e42<>res://.godot/imported/enemy_bullet.png-511ebf147b9193cfac8fb6687ff8dc9d.ctex::
 explosion.gd::GDScript::1179671827775730208::1778195657::0::1::::<>Node2D<><>0<>0<><>::
 explosion.tscn::PackedScene::8374903954713::1778195657::0::1::::<><><>0<>0<><>::res://explosion.gd<>res://enemy1.png
-export_presets.cfg::TextFile::-1::1778197555::0::1::::<><><>0<>0<><>::
+export_presets.cfg::TextFile::-1::1778197723::0::1::::<><><>0<>0<><>::
 hud.gd::GDScript::3432804707910893006::1778195657::0::1::::<>Control<><>0<>0<><>::
 icon.svg::CompressedTexture2D::4529707282033285832::1778195657::1778195657::1::::<><><>0<>0<>3615b8b9590df1c8526d83fa5d8cbc9b<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
-main.gd::GDScript::4356153142290935253::1778197665::0::1::::<>Node2D<><>0<>0<><>::
+main.gd::GDScript::4356153142290935253::1778197820::0::1::::<>Node2D<><>0<>0<><>::
 main.tscn::PackedScene::-1::1778197657::0::1::::<><><>0<>0<><>::res://main.gd<>res://hud.gd<>res://shaders/lcd_filter.gdshader
 money.png::CompressedTexture2D::16601476::1778195657::1778195657::1::::<><><>0<>0<>2ed06a5b600094a47604e8a5469ebb43<>res://.godot/imported/money.png-2dbfbb556abb72e251439c6d6ada9c17.ctex::
 panda2.png::CompressedTexture2D::682045807::1778195657::1778195657::1::::<><><>0<>0<>74f69dc5b353f355ff5501f7faa93789<>res://.godot/imported/panda2.png-31ca83e40aa90e08abfbcc7065eccf6c.ctex::
@@ -26,9 +26,9 @@ player.tscn::PackedScene::696258953::1778195657::0::1::::<><><>0<>0<><>::res://p
 README.md::TextFile::-1::1778195657::0::1::::<><><>0<>0<><>::
 receipt.png::CompressedTexture2D::26446256433::1778195657::1778195657::1::::<><><>0<>0<>8f81609eed71e642194ec92c26ada4a5<>res://.godot/imported/receipt.png-a05ce52e7b9795e91bcc65979c1c3561.ctex::
 SPEC.md::TextFile::-1::1778195657::0::1::::<><><>0<>0<><>::
-::res://play/::1778197554
-index.apple-touch-icon.png::CompressedTexture2D::6430506892828805657::1778197554::1778195856::1::::<><><>0<>0<>0a34e0b969f18b8b76b023a67f1a6fdb<>res://.godot/imported/index.apple-touch-icon.png-4bb97eb4bd2cd98f5051cf70609f3611.ctex::
-index.icon.png::CompressedTexture2D::798326691214881605::1778197554::1778195856::1::::<><><>0<>0<>963fff3c6e12bacd1917bac5c35939b7<>res://.godot/imported/index.icon.png-22c23f02452e7bb5b78e6b72fb9b6ef5.ctex::
-index.png::CompressedTexture2D::8793473848190131197::1778197554::1778195856::1::::<><><>0<>0<>a2ea9cfd85ae97c5fbfbb395ebc93d0e<>res://.godot/imported/index.png-a21975031b34aea24c9f7df47a3b0c86.ctex::
+::res://play/::1778197723
+index.apple-touch-icon.png::CompressedTexture2D::6430506892828805657::1778197723::1778195856::1::::<><><>0<>0<>0a34e0b969f18b8b76b023a67f1a6fdb<>res://.godot/imported/index.apple-touch-icon.png-4bb97eb4bd2cd98f5051cf70609f3611.ctex::
+index.icon.png::CompressedTexture2D::798326691214881605::1778197723::1778195856::1::::<><><>0<>0<>963fff3c6e12bacd1917bac5c35939b7<>res://.godot/imported/index.icon.png-22c23f02452e7bb5b78e6b72fb9b6ef5.ctex::
+index.png::CompressedTexture2D::8793473848190131197::1778197723::1778195856::1::::<><><>0<>0<>a2ea9cfd85ae97c5fbfbb395ebc93d0e<>res://.godot/imported/index.png-a21975031b34aea24c9f7df47a3b0c86.ctex::
 ::res://shaders/::1778195657
 lcd_filter.gdshader::Shader::1006888411771436578::1778195657::0::1::::<><><>0<>0<><>::
