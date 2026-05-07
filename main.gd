@@ -19,8 +19,31 @@ func _ready():
 	screen_size = get_viewport_rect().size
 	$CanvasLayer/HUD.visible = false
 	$CanvasLayer/GameOver.visible = false
-	$CanvasLayer/TouchArea.gui_input.connect(_on_touch_area_input)
-	$CanvasLayer/TouchArea.mouse_default_cursor_shape = CURSOR_POINTING_HAND
+	setup_touch_input()
+
+func setup_touch_input():
+	var touch_control = Control.new()
+	touch_control.set_name("TouchInputHandler")
+	touch_control.set_anchors_preset(Control.PRESET_FULL_RECT)
+	touch_control.mouse_filter = Control.MOUSE_FILTER_STOP
+	touch_control.gui_input.connect(_on_touch_input)
+	add_child(touch_control)
+
+func _on_touch_input(event):
+	if event is InputEventScreenTouch:
+		print("Touch detected: ", event.pressed)
+		if event.pressed:
+			if game_state == GameState.TITLE:
+				start_game()
+			elif game_state == GameState.GAMEOVER:
+				restart_game()
+	elif event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			print("Mouse click detected")
+			if game_state == GameState.TITLE:
+				start_game()
+			elif game_state == GameState.GAMEOVER:
+				restart_game()
 
 func _on_touch_area_input(event):
 	if event is InputEventScreenTouch and event.pressed:
@@ -45,14 +68,8 @@ func _process(delta):
 				spawn_timer = 0
 				spawn_delay = max(0.5, 2.0 - (game_time / 30.0))
 
-func _input(event):
+func _unhandled_input(event):
 	if event.is_action_pressed("ui_accept"):
-		if game_state == GameState.TITLE:
-			start_game()
-		elif game_state == GameState.GAMEOVER:
-			restart_game()
-	
-	if event is InputEventScreenTouch and event.pressed:
 		if game_state == GameState.TITLE:
 			start_game()
 		elif game_state == GameState.GAMEOVER:
