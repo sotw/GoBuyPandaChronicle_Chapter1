@@ -31,11 +31,20 @@ func _process(delta):
 	check_collisions()
 
 func check_collisions():
-	for area in get_overlapping_areas():
-		if area.is_in_group("player_bullets"):
-			get_parent()._on_enemy_hit(position, area, type)
+	for bullet in get_tree().get_nodes_in_group("player_bullets"):
+		if position.distance_to(bullet.position) < 15:
+			get_parent()._on_enemy_hit(position, bullet, type)
 			queue_free()
 			return
+	
+	var player = get_tree().get_first_node_in_group("player")
+	if player and position.distance_to(player.position) < 20:
+		if not player.invincible:
+			player.hit.emit()
+			var explosion = load("res://explosion.tscn").instantiate()
+			explosion.position = position
+			get_parent().add_child(explosion)
+			queue_free()
 
 func set_type(new_type):
 	type = new_type

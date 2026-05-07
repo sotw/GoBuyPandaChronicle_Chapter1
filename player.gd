@@ -63,4 +63,7 @@ func blink_effect():
 		tween.tween_property(self, "modulate:a", 0.3, 0.15)
 		tween.tween_property(self, "modulate:a", 1.0, 0.15)
 	invincible = true
-	tween.tween_callback(func(): invincible = false)
+	tween.tween_callback(_on_blink_done)
+
+func _on_blink_done():
+	invincible = false
