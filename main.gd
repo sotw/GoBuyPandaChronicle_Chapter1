@@ -20,6 +20,7 @@ func _ready():
 	$CanvasLayer/HUD.visible = false
 	$CanvasLayer/GameOver.visible = false
 	$CanvasLayer/TouchArea.gui_input.connect(_on_touch_area_input)
+	$CanvasLayer/TouchArea.mouse_default_cursor_shape = CURSOR_POINTING_HAND
 
 func _on_touch_area_input(event):
 	if event is InputEventScreenTouch and event.pressed:
@@ -44,7 +45,7 @@ func _process(delta):
 				spawn_timer = 0
 				spawn_delay = max(0.5, 2.0 - (game_time / 30.0))
 
-func _unhandled_input(event):
+func _input(event):
 	if event.is_action_pressed("ui_accept"):
 		if game_state == GameState.TITLE:
 			start_game()
