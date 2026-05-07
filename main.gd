@@ -19,6 +19,20 @@ func _ready():
 	screen_size = get_viewport_rect().size
 	$CanvasLayer/HUD.visible = false
 	$CanvasLayer/GameOver.visible = false
+	$CanvasLayer/TouchArea.gui_input.connect(_on_touch_area_input)
+
+func _on_touch_area_input(event):
+	if event is InputEventScreenTouch and event.pressed:
+		if game_state == GameState.TITLE:
+			start_game()
+		elif game_state == GameState.GAMEOVER:
+			restart_game()
+	elif event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if game_state == GameState.TITLE:
+				start_game()
+			elif game_state == GameState.GAMEOVER:
+				restart_game()
 
 func _process(delta):
 	match game_state:
