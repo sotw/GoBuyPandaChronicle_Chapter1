@@ -74,6 +74,10 @@ func restart_game():
 		player.queue_free()
 	start_game()
 
+func add_score(points):
+	score += points
+	$CanvasLayer/HUD.update_score(score)
+
 func spawn_enemy():
 	var enemy = enemy_scene.instantiate()
 	var rand_x = randf_range(20, screen_size.x - 20)
