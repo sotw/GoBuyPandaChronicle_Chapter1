@@ -63,11 +63,13 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="Title" type="Control" parent="CanvasLayer"]
+[node name="Title" type="Button" parent="CanvasLayer"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+theme_override_colors/font_color = Color(0, 0, 0, 0)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 0)
 
 [node name="Label" type="Label" parent="CanvasLayer/Title"]
 layout_mode = 1
@@ -146,12 +148,14 @@ theme_override_colors/font_color = Color(0, 1, 0, 1)
 theme_override_font_sizes/font_size = 10
 text = "LIVES: 3"
 
-[node name="GameOver" type="Control" parent="CanvasLayer"]
+[node name="GameOver" type="Button" parent="CanvasLayer"]
 visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+theme_override_colors/font_color = Color(0, 0, 0, 0)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 0)
 
 [node name="Label" type="Label" parent="CanvasLayer/GameOver"]
 layout_mode = 1
