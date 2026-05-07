@@ -27,6 +27,15 @@ func _process(delta):
 	
 	if position.y > screen_size.y + 20:
 		queue_free()
+	
+	check_collisions()
+
+func check_collisions():
+	for area in get_overlapping_areas():
+		if area.is_in_group("player_bullets"):
+			get_parent()._on_enemy_hit(position, area, type)
+			queue_free()
+			return
 
 func set_type(new_type):
 	type = new_type

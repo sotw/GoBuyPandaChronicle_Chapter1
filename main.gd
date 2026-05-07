@@ -88,23 +88,18 @@ func spawn_enemy():
 		enemy.set_type(2)
 	
 	enemy.add_to_group("enemies")
-	enemy.area_entered.connect(_on_enemy_area_entered)
 	add_child(enemy)
 
-func _on_enemy_area_entered(area):
-	if area.is_in_group("player_bullets"):
-		var enemy = area.get_parent()
-		if enemy.is_in_group("enemies"):
-			var explosion = explosion_scene.instantiate()
-			explosion.position = enemy.position
-			add_child(explosion)
-			match enemy.type:
-				0: score += 10
-				1: score += 25
-				2: score += 50
-			enemy.queue_free()
-			area.queue_free()
-			$CanvasLayer/HUD.update_score(score)
+func _on_enemy_hit(enemy_pos, bullet, enemy_type):
+	var explosion = explosion_scene.instantiate()
+	explosion.position = enemy_pos
+	add_child(explosion)
+	match enemy_type:
+		0: score += 10
+		1: score += 25
+		2: score += 50
+	bullet.queue_free()
+	$CanvasLayer/HUD.update_score(score)
 
 func _on_player_hit():
 	lives -= 1
