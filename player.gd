@@ -49,7 +49,6 @@ func _on_area_entered(area):
 	if area.is_in_group("enemies") or area.is_in_group("enemy_bullets"):
 		if not invincible:
 			hit.emit()
-			start_invincible()
 
 func start_invincible():
 	invincible = true
@@ -57,3 +56,11 @@ func start_invincible():
 	await get_tree().create_timer(invincible_time).timeout
 	invincible = false
 	modulate.a = 1.0
+
+func blink_effect():
+	var tween = create_tween()
+	for i in range(6):
+		tween.tween_property(self, "modulate:a", 0.3, 0.15)
+		tween.tween_property(self, "modulate:a", 1.0, 0.15)
+	invincible = true
+	tween.tween_callback(func(): invincible = false)

@@ -108,7 +108,12 @@ func _on_enemy_hit(enemy_pos, bullet, enemy_type):
 func _on_player_hit():
 	lives -= 1
 	$CanvasLayer/HUD.update_lives(lives)
-	if lives <= 0:
+	if lives > 0:
+		player.blink_effect()
+	else:
+		var explosion = explosion_scene.instantiate()
+		explosion.position = player.position
+		add_child(explosion)
 		game_over()
 
 func game_over():
