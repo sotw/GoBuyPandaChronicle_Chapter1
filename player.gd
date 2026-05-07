@@ -33,8 +33,8 @@ func _process(delta):
 		velocity = velocity.normalized() * speed
 	
 	position += velocity * delta
-	position.x = clamp(position.x, 16, screen_size.x - 16)
-	position.y = clamp(position.y, 16, screen_size.y - 16)
+	position.x = clamp(position.x, 20, screen_size.x - 20)
+	position.y = clamp(position.y, 20, screen_size.y - 20)
 	
 	if Input.is_key_pressed(KEY_SPACE) and can_shoot:
 		shoot_bullet()

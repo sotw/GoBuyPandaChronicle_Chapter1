@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://panda"
-path="res://.godot/imported/panda.png-003d6e901990ebb2402d097f2c11718d.ctex"
+uid="uid://bill"
+path="res://.godot/imported/bill.png-1234567890abcdef.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://panda.png"
-dest_files=["res://.godot/imported/panda.png-003d6e901990ebb2402d097f2c11718d.ctex"]
+source_file="res://bill.png"
+dest_files=["res://.godot/imported/bill.png-1234567890abcdef.ctex"]
 
 [params]
 

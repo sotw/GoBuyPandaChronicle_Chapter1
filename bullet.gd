@@ -20,7 +20,7 @@ func _process(delta):
 
 func check_enemy_collisions():
 	for enemy in get_tree().get_nodes_in_group("enemies"):
-		if enemy.position.distance_to(position) < collision_radius + 10:
+		if enemy.position.distance_to(position) < collision_radius + 15:
 			var explosion = load("res://explosion.tscn").instantiate()
 			explosion.position = enemy.position
 			get_parent().add_child(explosion)

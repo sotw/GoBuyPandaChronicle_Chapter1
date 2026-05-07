@@ -10,6 +10,9 @@ var time_elapsed = 0.0
 func _ready():
 	screen_size = get_viewport_rect().size
 	start_x = position.x
+	var sprite = Sprite2D.new()
+	sprite.texture = load("res://bill.png")
+	add_child(sprite)
 
 func _process(delta):
 	time_elapsed += delta
@@ -32,13 +35,13 @@ func _process(delta):
 
 func check_collisions():
 	for bullet in get_tree().get_nodes_in_group("player_bullets"):
-		if position.distance_to(bullet.position) < 15:
+		if position.distance_to(bullet.position) < 20:
 			get_parent()._on_enemy_hit(position, bullet, type)
 			queue_free()
 			return
 	
 	var player = get_tree().get_first_node_in_group("player")
-	if player and position.distance_to(player.position) < 20:
+	if player and position.distance_to(player.position) < 28:
 		if not player.invincible:
 			player.hit.emit()
 			var explosion = load("res://explosion.tscn").instantiate()
