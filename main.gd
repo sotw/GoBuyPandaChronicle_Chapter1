@@ -13,6 +13,7 @@ var restart_pressed = false
 
 var player_scene = preload("res://player.tscn")
 var enemy_scene = preload("res://enemy.tscn")
+var explosion_scene = preload("res://explosion.tscn")
 var player
 var screen_size
 
@@ -94,6 +95,9 @@ func _on_enemy_area_entered(area):
 	if area.is_in_group("player_bullets"):
 		var enemy = area.get_parent()
 		if enemy.is_in_group("enemies"):
+			var explosion = explosion_scene.instantiate()
+			explosion.position = enemy.position
+			add_child(explosion)
 			match enemy.type:
 				0: score += 10
 				1: score += 25
