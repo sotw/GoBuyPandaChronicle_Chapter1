@@ -10,9 +10,12 @@ var shoot_delay = 0.33
 var invincible = false
 var invincible_time = 2.0
 var sprite
+var target_position: Vector2
+var is_touching = false
 
 func _ready():
 	screen_size = get_viewport_rect().size
+	position = Vector2(screen_size.x / 2, screen_size.y - 40)
 	sprite = Sprite2D.new()
 	sprite.texture = load("res://panda.png")
 	add_child(sprite)
@@ -20,13 +23,21 @@ func _ready():
 func _process(delta):
 	var velocity = Vector2.ZERO
 	
-	if Input.is_key_pressed(KEY_LEFT) or Input.is_key_pressed(KEY_A):
+	if is_touching and target_position != Vector2.ZERO:
+		var direction = target_position - position
+		if direction.length() > 5:
+			velocity = direction.normalized() * speed
+			if can_shoot and is_touching:
+				shoot_bullet()
+				can_shoot = false
+				get_tree().create_timer(shoot_delay).timeout.connect(_on_shoot_ready)
+	elif Input.is_key_pressed(KEY_LEFT) or Input.is_key_pressed(KEY_A):
 		velocity.x -= 1
-	if Input.is_key_pressed(KEY_RIGHT) or Input.is_key_pressed(KEY_D):
+	elif Input.is_key_pressed(KEY_RIGHT) or Input.is_key_pressed(KEY_D):
 		velocity.x += 1
-	if Input.is_key_pressed(KEY_UP) or Input.is_key_pressed(KEY_W):
+	elif Input.is_key_pressed(KEY_UP) or Input.is_key_pressed(KEY_W):
 		velocity.y -= 1
-	if Input.is_key_pressed(KEY_DOWN) or Input.is_key_pressed(KEY_S):
+	elif Input.is_key_pressed(KEY_DOWN) or Input.is_key_pressed(KEY_S):
 		velocity.y += 1
 	
 	if velocity.length() > 0:
@@ -39,8 +50,36 @@ func _process(delta):
 	if Input.is_key_pressed(KEY_SPACE) and can_shoot:
 		shoot_bullet()
 		can_shoot = false
-		await get_tree().create_timer(shoot_delay).timeout
-		can_shoot = true
+		get_tree().create_timer(shoot_delay).timeout.connect(_on_shoot_ready)
+
+func _on_shoot_ready():
+	can_shoot = true
+
+func _input(event):
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			target_position = get_canvas_transform().affine_inverse() * event.position
+			target_position.x = clamp(target_position.x, 20, screen_size.x - 20)
+			target_position.y = clamp(target_position.y, 20, screen_size.y - 20)
+			is_touching = true
+		else:
+			is_touching = false
+			target_position = Vector2.ZERO
+	elif event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				target_position = get_global_mouse_position()
+				target_position.x = clamp(target_position.x, 20, screen_size.x - 20)
+				target_position.y = clamp(target_position.y, 20, screen_size.y - 20)
+				is_touching = true
+			else:
+				is_touching = false
+				target_position = Vector2.ZERO
+	elif event is InputEventMouseMotion:
+		if is_touching:
+			target_position = get_global_mouse_position()
+			target_position.x = clamp(target_position.x, 20, screen_size.x - 20)
+			target_position.y = clamp(target_position.y, 20, screen_size.y - 20)
 
 func shoot_bullet():
 	var bullet = bullet_scene.instantiate()

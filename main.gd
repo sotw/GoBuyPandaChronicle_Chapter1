@@ -8,8 +8,6 @@ var lives = 3
 var spawn_timer = 0.0
 var spawn_delay = 2.0
 var game_time = 0.0
-var space_pressed = false
-var restart_pressed = false
 
 var player_scene = preload("res://player.tscn")
 var enemy_scene = preload("res://enemy.tscn")
@@ -22,20 +20,7 @@ func _ready():
 	$CanvasLayer/HUD.visible = false
 	$CanvasLayer/GameOver.visible = false
 
-func _input(event):
-	if event is InputEventKey and event.pressed:
-		if game_state == GameState.TITLE and event.keycode == KEY_SPACE and not space_pressed:
-			space_pressed = true
-			start_game()
-		elif game_state == GameState.GAMEOVER and event.keycode == KEY_SPACE and not restart_pressed:
-			restart_pressed = true
-			restart_game()
-
 func _process(delta):
-	if not Input.is_key_pressed(KEY_SPACE):
-		space_pressed = false
-		restart_pressed = false
-	
 	match game_state:
 		GameState.PLAYING:
 			game_time += delta
@@ -44,6 +29,25 @@ func _process(delta):
 				spawn_enemy()
 				spawn_timer = 0
 				spawn_delay = max(0.5, 2.0 - (game_time / 30.0))
+
+func _unhandled_input(event):
+	var pressed = false
+	if event is InputEventMouseButton:
+		pressed = event.pressed
+	elif event is InputEventScreenTouch:
+		pressed = event.pressed
+	
+	if pressed:
+		if game_state == GameState.TITLE:
+			start_game()
+		elif game_state == GameState.GAMEOVER:
+			restart_game()
+
+func _input_event(_viewport, event, _shape_idx):
+	if event is InputEventMouseMotion:
+		if player and player.is_touching:
+			var world_pos = get_canvas_transform().affine_inverse() * event.position
+			player.target_position = world_pos
 
 func start_game():
 	game_state = GameState.PLAYING
@@ -80,7 +84,7 @@ func add_score(points):
 
 func spawn_enemy():
 	var enemy = enemy_scene.instantiate()
-	var rand_x = randf_range(20, screen_size.x - 20)
+	var rand_x = randf_range(30, screen_size.x - 30)
 	enemy.position = Vector2(rand_x, -20)
 	
 	var type_rng = randf()
