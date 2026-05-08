@@ -37,19 +37,33 @@ func _on_gameover_pressed():
 		restart_game()
 
 func _input(event):
-	# 1. Handle Menu Navigation (Taps/Buttons)
+	# 1. Handle Menu Navigation (Standard UI)
 	if event.is_action_pressed("ui_accept") or event.is_action_pressed("ui_select"):
 		if game_state == GameState.TITLE:
 			start_game()
 		elif game_state == GameState.GAMEOVER:
 			restart_game()
 	
-	# 2. Handle Player Movement (Touch and Drag)
-	if event is InputEventScreenTouch or event is InputEventScreenDrag:
+	# 2. Handle Multi-Touch Logic
+	if event is InputEventScreenTouch:
 		if game_state == GameState.PLAYING and is_instance_valid(player):
-			# Map the touch screen position to the game world position
-			var world_pos = get_canvas_transform().affine_inverse() * event.position
-			player.target_position = world_pos
+			# INDEX 0: The first finger on screen (Movement)
+			if event.index == 0:
+				var world_pos = get_canvas_transform().affine_inverse() * event.position
+				player.target_position = world_pos
+			
+			# INDEX 1+: Any additional finger (Special Move)
+			elif event.index >= 1 and event.pressed:
+				# Trigger special move only if the player has the method
+				if player.has_method("use_special_move"):
+					player.use_special_move()
+
+	elif event is InputEventScreenDrag:
+		# Dragging only updates movement if it's the primary finger
+		if game_state == GameState.PLAYING and is_instance_valid(player):
+			if event.index == 0:
+				var world_pos = get_canvas_transform().affine_inverse() * event.position
+				player.target_position = world_pos
 
 # --- Game Loop ---
 
