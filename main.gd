@@ -86,6 +86,8 @@ func start_game():
 	player.target_position = player.position 
 	player.add_to_group("player")
 	player.hit.connect(_on_player_hit)
+	player.special_moves_changed.connect(_on_special_moves_changed)
+	player.reset_special_moves()
 	add_child(player)
 
 func restart_game():
@@ -148,8 +150,12 @@ func _on_player_hit():
 	if lives > 0:
 		if player.has_method("blink_effect"):
 			player.blink_effect()
+		player.reset_special_moves()
 	else:
 		var explosion = explosion_scene.instantiate()
 		explosion.position = player.position
 		add_child(explosion)
 		game_over()
+
+func _on_special_moves_changed(count):
+	$CanvasLayer/HUD.update_special_moves(count)

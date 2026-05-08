@@ -1,6 +1,7 @@
 extends Area2D
 
 signal hit
+signal special_moves_changed(count)
 
 var speed = 150.0
 var screen_size
@@ -12,6 +13,10 @@ var invincible_time = 2.0
 var sprite
 var target_position: Vector2
 var is_touching = false
+var special_moves = 3
+var is_special_firing = false
+var active_touches = 0
+var can_trigger_special = true
 
 func _ready():
 	screen_size = get_viewport_rect().size
@@ -56,7 +61,19 @@ func _on_shoot_ready():
 	can_shoot = true
 
 func _input(event):
+	if event is InputEventKey and event.keycode == KEY_X and event.pressed:
+		special_move()
+	
 	if event is InputEventScreenTouch:
+		if event.pressed:
+			active_touches += 1
+			if active_touches >= 2 and can_trigger_special:
+				special_move()
+				can_trigger_special = false
+		else:
+			active_touches = max(0, active_touches - 1)
+			if active_touches < 2:
+				can_trigger_special = true
 		if event.pressed:
 			target_position = get_canvas_transform().affine_inverse() * event.position
 			target_position.x = clamp(target_position.x, 20, screen_size.x - 20)
@@ -87,6 +104,31 @@ func shoot_bullet():
 	bullet.position.y -= 12
 	get_parent().add_child(bullet)
 	bullet.add_to_group("player_bullets")
+
+func special_move():
+	if special_moves > 0 and not is_special_firing:
+		is_special_firing = true
+		special_moves -= 1
+		special_moves_changed.emit(special_moves)
+		
+		fire_special_wave()
+		
+		for i in range(9):
+			await get_tree().create_timer(0.1).timeout
+			fire_special_wave()
+		
+		is_special_firing = false
+
+func fire_special_wave():
+	for i in range(5):
+		var bullet = bullet_scene.instantiate()
+		bullet.position = Vector2(randf_range(20, screen_size.x - 20), screen_size.y - 10)
+		get_parent().add_child(bullet)
+		bullet.add_to_group("player_bullets")
+
+func reset_special_moves():
+	special_moves = 3
+	special_moves_changed.emit(special_moves)
 
 func _on_area_entered(area):
 	if area.is_in_group("enemies") or area.is_in_group("enemy_bullets"):

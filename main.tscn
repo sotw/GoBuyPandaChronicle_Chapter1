@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://b3cfg86ho8ay4" path="res://main.gd" id="1_main"]
 [ext_resource type="Script" uid="uid://bo5416s1pckks" path="res://hud.gd" id="2_hud"]
 [ext_resource type="Shader" uid="uid://ol0kmvbowkh3" path="res://shaders/lcd_filter.gdshader" id="3_lcd"]
+[ext_resource type="Texture2D" uid="uid://bill_texture" path="res://bill.png" id="4_bill"]
 
 [sub_resource type="ShaderMaterial" id="SubResource_lcd"]
 shader = ExtResource("3_lcd")
@@ -135,6 +136,32 @@ grow_horizontal = 0
 theme_override_colors/font_color = Color(0, 1, 0, 1)
 theme_override_font_sizes/font_size = 10
 text = "LIVES: 3"
+
+[node name="SpecialMovesContainer" type="HBoxContainer" parent="CanvasLayer/HUD" unique_id=123456789]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -28.0
+offset_right = 68.0
+offset_bottom = -8.0
+grow_vertical = 0
+
+[node name="Icon1" type="Sprite2D" parent="CanvasLayer/HUD/SpecialMovesContainer" unique_id=123456790]
+texture = ExtResource("4_bill")
+scale = Vector2(0.5, 0.5)
+position = Vector2(8, 0)
+
+[node name="Icon2" type="Sprite2D" parent="CanvasLayer/HUD/SpecialMovesContainer" unique_id=123456791]
+texture = ExtResource("4_bill")
+scale = Vector2(0.5, 0.5)
+position = Vector2(24, 0)
+
+[node name="Icon3" type="Sprite2D" parent="CanvasLayer/HUD/SpecialMovesContainer" unique_id=123456792]
+texture = ExtResource("4_bill")
+scale = Vector2(0.5, 0.5)
+position = Vector2(40, 0)
 
 [node name="GameOver" type="Button" parent="CanvasLayer" unique_id=893582016]
 visible = false
