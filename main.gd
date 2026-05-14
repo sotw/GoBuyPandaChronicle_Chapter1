@@ -15,6 +15,11 @@ var explosion_scene = preload("res://explosion.tscn")
 var player
 var screen_size
 
+var star_layers: Array = []
+var star_texture: Texture2D
+var rotating_star_positions: Array = []
+var parallax_initialized = false
+
 # --- Initialization ---
 
 func _ready():
@@ -25,6 +30,104 @@ func _ready():
 	# Connect Button signals safely
 	$CanvasLayer/Title.pressed.connect(_on_title_pressed)
 	$CanvasLayer/GameOver.pressed.connect(_on_gameover_pressed)
+
+func create_star_texture():
+	var image = Image.create(4, 4, false, Image.FORMAT_RGBA8)
+	var center = 2.0
+	
+	for x in range(4):
+		for y in range(4):
+			var dist = Vector2(x, y).distance_to(Vector2(center, center))
+			if dist < 2.0:
+				var alpha = 1.0 - (dist / 2.0)
+				image.set_pixel(x, y, Color(1, 1, 1, alpha))
+	
+	star_texture = ImageTexture.create_from_image(image)
+
+func setup_parallax_layers():
+	var stars_node = $Stars
+	stars_node.visible = true
+	
+	var layer_configs = [
+		{"speed": 5.0, "count": 20, "size": 0.3, "color": Color(0.5, 0.5, 0.6, 0.5)},
+		{"speed": 10.0, "count": 25, "size": 0.5, "color": Color(0.7, 0.7, 0.8, 0.7)},
+		{"speed": 20.0, "count": 15, "size": 0.8, "color": Color(1, 1, 1, 0.9)},
+		{"speed": 35.0, "count": 8, "size": 1.2, "color": Color(1, 1, 1, 1.0)}
+	]
+	
+	for config in layer_configs:
+		var layer_node = Node2D.new()
+		layer_node.set_meta("speed", config.speed)
+		stars_node.add_child(layer_node)
+		
+		var stars: Array = []
+		for i in range(config.count):
+			var sprite = Sprite2D.new()
+			sprite.texture = star_texture
+			sprite.scale = Vector2(config.size, config.size)
+			sprite.modulate = config.color
+			sprite.position = Vector2(randf() * screen_size.x, randf() * screen_size.y)
+			layer_node.add_child(sprite)
+			stars.append(sprite)
+		
+		star_layers.append({"node": layer_node, "stars": stars, "speed": config.speed})
+	
+	# Create rotating starfield (Mode 7 style center rotation)
+	var rotating_node = Node2D.new()
+	rotating_node.name = "RotatingStars"
+	stars_node.add_child(rotating_node)
+	
+	for i in range(12):
+		var sprite = Sprite2D.new()
+		sprite.texture = star_texture
+		sprite.scale = Vector2(0.6, 0.6)
+		sprite.modulate = Color(0.8, 0.85, 1.0, 0.6)
+		
+		var angle = (i * TAU) / 12.0
+		var radius = 80.0
+		sprite.position = Vector2(screen_size.x / 2 + cos(angle) * radius, screen_size.y / 2 + sin(angle) * radius)
+		
+		rotating_node.add_child(sprite)
+		rotating_star_positions.append({"sprite": sprite, "angle": angle, "radius": radius})
+
+	# Add nebula clouds (semi-transparent colored gradients)
+	create_nebula_clouds()
+
+func create_nebula_clouds():
+	var stars_node = $Stars
+	
+	var nebula_node = Node2D.new()
+	nebula_node.name = "Nebula"
+	nebula_node.set_meta("speed", 8.0)
+	stars_node.add_child(nebula_node)
+	
+	# Create nebula texture (soft gradient circle)
+	var nebula_tex = create_nebula_texture()
+	
+	# Create 3 soft nebula clouds
+	for i in range(3):
+		var nebula = Sprite2D.new()
+		nebula.texture = nebula_tex
+		nebula.scale = Vector2(3.0, 2.5)
+		nebula.modulate = Color(0.4, 0.15, 0.5, 0.25)
+		nebula.position = Vector2(randf() * screen_size.x, randf() * screen_size.y)
+		nebula_node.add_child(nebula)
+	
+	star_layers.append({"node": nebula_node, "nebula": true, "speed": 8.0})
+
+func create_nebula_texture() -> Texture2D:
+	var size = 32
+	var image = Image.create(size, size, false, Image.FORMAT_RGBA8)
+	var center = size / 2.0
+	
+	for x in range(size):
+		for y in range(size):
+			var dist = Vector2(x, y).distance_to(Vector2(center, center))
+			if dist < center:
+				var alpha = pow(1.0 - (dist / center), 2.0) * 0.5
+				image.set_pixel(x, y, Color(1, 1, 1, alpha))
+	
+	return ImageTexture.create_from_image(image)
 
 # --- Input Handling ---
 
@@ -68,6 +171,19 @@ func _input(event):
 # --- Game Loop ---
 
 func _process(delta):
+	# Initialize parallax on first frame (for HTML5 export compatibility)
+	if not parallax_initialized:
+		screen_size = get_viewport_rect().size
+		create_star_texture()
+		setup_parallax_layers()
+		parallax_initialized = true
+	
+	# Update screen size in case of resize
+	screen_size = get_viewport_rect().size
+	
+	# Parallax scrolling
+	update_parallax(delta)
+	
 	match game_state:
 		GameState.PLAYING:
 			game_time += delta
@@ -75,8 +191,50 @@ func _process(delta):
 			if spawn_timer >= spawn_delay:
 				spawn_enemy()
 				spawn_timer = 0
-				# Difficulty curve: speed up spawns over time
 				spawn_delay = max(0.5, 2.0 - (game_time / 30.0))
+
+func update_parallax(delta):
+	var stars_node = $Stars
+	if not stars_node:
+		return
+	
+	# Scroll each star layer
+	for layer_data in star_layers:
+		var node = layer_data.get("node")
+		if node and is_instance_valid(node):
+			var speed = layer_data.get("speed", 10.0)
+			
+			if layer_data.get("nebula", false):
+				for child in node.get_children():
+					child.position.y += speed * delta
+					if child.position.y > screen_size.y:
+						var nebula_height = 64.0  # Approximate nebula height
+						child.position.y = -nebula_height
+						child.position.x = randf() * screen_size.x
+			else:
+				var stars = layer_data.get("stars", [])
+				for star in stars:
+					if is_instance_valid(star):
+						star.position.y += speed * delta
+						if star.position.y > screen_size.y + 10:
+							star.position.y = -10
+							star.position.x = randf() * screen_size.x
+	
+	# Rotate starfield
+	var rotating_node = stars_node.get_node_or_null("RotatingStars")
+	if rotating_node and is_instance_valid(rotating_node):
+		rotating_node.rotation += 0.15 * delta
+	
+	# Also animate rotating stars in a circular pattern
+	for star_data in rotating_star_positions:
+		var sprite = star_data.get("sprite")
+		if is_instance_valid(sprite):
+			star_data.angle += 0.2 * delta
+			var radius = star_data.radius
+			sprite.position = Vector2(
+				screen_size.x / 2 + cos(star_data.angle) * radius,
+				screen_size.y / 2 + sin(star_data.angle) * radius
+			)
 
 # --- Game State Methods ---
 
