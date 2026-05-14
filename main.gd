@@ -6,7 +6,7 @@ var game_state = GameState.TITLE
 var score = 0
 var lives = 3
 var spawn_timer = 0.0
-var spawn_delay = 2.0
+var spawn_delay = 1.5
 var game_time = 0.0
 
 var player_scene = preload("res://player.tscn")
@@ -191,7 +191,7 @@ func _process(delta):
 			if spawn_timer >= spawn_delay:
 				spawn_enemy()
 				spawn_timer = 0
-				spawn_delay = max(0.5, 2.0 - (game_time / 30.0))
+				spawn_delay = max(0.3, 1.5 - (game_time / 25.0))
 
 func update_parallax(delta):
 	var stars_node = $Stars
@@ -243,7 +243,7 @@ func start_game():
 	score = 0
 	lives = 3
 	spawn_timer = 0.0
-	spawn_delay = 2.0
+	spawn_delay = 1.5
 	game_time = 0.0
 	
 	$CanvasLayer/Title.visible = false

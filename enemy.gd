@@ -2,7 +2,7 @@ extends Area2D
 
 enum Type { BASIC, SWEEPER, CHASER }
 var type = Type.BASIC
-var speed = 80.0
+var speed = 120.0
 var screen_size
 var start_x
 var time_elapsed = 0.0
@@ -68,8 +68,8 @@ func set_type(new_type):
 	type = new_type
 	match type:
 		Type.BASIC:
-			speed = 80
+			speed = 120
 		Type.SWEEPER:
-			speed = 60
+			speed = 90
 		Type.CHASER:
-			speed = 50
+			speed = 70
