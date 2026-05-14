@@ -47,6 +47,12 @@ func _process(delta):
 	
 	if velocity.length() > 0:
 		velocity = velocity.normalized() * speed
+		# Subtle rotation wobble (±10°) based on movement direction
+		var target_rotation = clamp(velocity.x * 0.01, -0.17, 0.17)
+		sprite.rotation = lerp(sprite.rotation, target_rotation, 10 * delta)
+	else:
+		# Return to center when not moving
+		sprite.rotation = lerp(sprite.rotation, 0.0, 10 * delta)
 	
 	position += velocity * delta
 	position.x = clamp(position.x, 20, screen_size.x - 20)

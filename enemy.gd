@@ -10,23 +10,38 @@ var time_elapsed = 0.0
 func _ready():
 	screen_size = get_viewport_rect().size
 	start_x = position.x
-	var sprite = Sprite2D.new()
-	sprite.texture = load("res://receipt.png")
-	add_child(sprite)
+	var sprite = get_node_or_null("Sprite2D")
+	if sprite:
+		sprite.texture = load("res://receipt.png")
 
 func _process(delta):
 	time_elapsed += delta
+	
+	# Get existing sprite from scene
+	var sprite = get_node_or_null("Sprite2D")
+	
 	match type:
 		Type.BASIC:
 			position.y += speed * delta
+			if sprite:
+				sprite.rotation = sin(time_elapsed * 5) * 0.1
 		Type.SWEEPER:
 			position.y += speed * delta
 			position.x = start_x + sin(time_elapsed * 3) * 40
+			if sprite:
+				sprite.rotation = sin(time_elapsed * 4) * 0.17
 		Type.CHASER:
 			var player = get_tree().get_first_node_in_group("player")
 			if player:
 				var direction = (player.position - position).normalized()
 				position += direction * (speed * 0.5) * delta
+				if sprite:
+					sprite.rotation = direction.angle() + PI/2
+	
+	# Very subtle pulse (almost invisible)
+	if sprite:
+		var pulse = 1.0 + sin(time_elapsed * 6) * 0.02
+		sprite.scale = Vector2(pulse, pulse)
 	
 	if position.y > screen_size.y + 20:
 		queue_free()
