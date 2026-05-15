@@ -1,6 +1,5 @@
 # Godot
 .godot/
-play/
 export_presets.cfg
 *.pck
 *.wasm
