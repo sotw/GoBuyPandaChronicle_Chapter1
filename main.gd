@@ -278,7 +278,7 @@ func game_over():
 	if is_instance_valid(player):
 		player.queue_free()
 	$CanvasLayer/GameOver.visible = true
-	$CanvasLayer/GameOver/FinalScore.text = "SCORE: " + str(score)
+	$CanvasLayer/GameOver/FinalScore.text = "SPENT: " + str(score) + "$"
 
 # --- Combat & Scoring ---
 

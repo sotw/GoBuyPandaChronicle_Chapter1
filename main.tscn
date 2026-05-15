@@ -72,7 +72,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0, 1, 0, 1)
 theme_override_font_sizes/font_size = 14
-text = "PANDA CHRONICLE"
+text = "Go!Shopping Panda"
 
 [node name="PressSpace" type="Label" parent="CanvasLayer/Title" unique_id=1939470822]
 layout_mode = 1
@@ -193,7 +193,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.2, 0.2, 1)
 theme_override_font_sizes/font_size = 18
-text = "GAME OVER"
+text = "BANKRUPT"
 
 [node name="FinalScore" type="Label" parent="CanvasLayer/GameOver" unique_id=1244076973]
 layout_mode = 1

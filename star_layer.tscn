@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://star_layer_unique"]
+
+[node name="StarLayer" type="Node2D"]
+
+[node name="Stars" type="Node2D" parent="."]

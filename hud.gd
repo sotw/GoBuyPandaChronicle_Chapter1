@@ -5,7 +5,7 @@ extends Control
 @onready var special_moves_container = $SpecialMovesContainer
 
 func update_score(new_score):
-	score_label.text = "SCORE: " + str(new_score)
+	score_label.text = "SPENT: " + str(new_score) + "$"
 
 func update_lives(new_lives):
 	lives_label.text = "LIVES: " + str(new_lives)
