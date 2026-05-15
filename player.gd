@@ -2,6 +2,8 @@ extends Area2D
 
 signal hit
 signal special_moves_changed(count)
+signal special_move_started
+signal special_move_ended
 
 var speed = 150.0
 var screen_size
@@ -116,6 +118,7 @@ func special_move():
 		is_special_firing = true
 		special_moves -= 1
 		special_moves_changed.emit(special_moves)
+		special_move_started.emit()
 		
 		fire_special_wave()
 		
@@ -124,6 +127,7 @@ func special_move():
 			fire_special_wave()
 		
 		is_special_firing = false
+		special_move_ended.emit()
 
 func fire_special_wave():
 	for i in range(5):

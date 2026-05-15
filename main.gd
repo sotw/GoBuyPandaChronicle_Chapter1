@@ -13,7 +13,9 @@ var player_scene = preload("res://player.tscn")
 var enemy_scene = preload("res://enemy.tscn")
 var explosion_scene = preload("res://explosion.tscn")
 var player
+var special_background: AnimatedSprite2D
 var screen_size
+var gif_size = Vector2(240, 135)
 
 var star_layers: Array = []
 var star_texture: Texture2D
@@ -26,6 +28,37 @@ func _ready():
 	screen_size = get_viewport_rect().size
 	$CanvasLayer/HUD.visible = false
 	$CanvasLayer/GameOver.visible = false
+	
+	special_background = $SpecialBackground
+	
+	# Load PNG frames and create SpriteFrames at runtime
+	var frames = SpriteFrames.new()
+	frames.add_animation("default")
+	
+	var frame_dir = "res://gif_frames/"
+	var frame_num = 1
+	while true:
+		var frame_path = frame_dir + "frame_%03d.png" % frame_num
+		var frame_texture = load(frame_path)
+		if not frame_texture:
+			break
+		frames.add_frame("default", frame_texture)
+		frame_num += 1
+		if frame_num > 100:
+			break
+	
+	if frames.get_frame_count("default") > 0:
+		special_background.sprite_frames = frames
+		special_background.speed_scale = 1.0
+		var first_frame = frames.get_frame_texture("default", 0)
+		if first_frame:
+			gif_size = first_frame.get_size()
+	
+	# Scale based on screen height, keep original ratio
+	var scale_by_height = screen_size.y / gif_size.y
+	
+	special_background.position = screen_size / 2
+	special_background.scale = Vector2(scale_by_height, scale_by_height)
 	
 	# Connect Button signals safely
 	$CanvasLayer/Title.pressed.connect(_on_title_pressed)
@@ -181,6 +214,13 @@ func _process(delta):
 	# Update screen size in case of resize
 	screen_size = get_viewport_rect().size
 	
+	# Update special background scale on resize (based on height, keep ratio)
+	if special_background and is_instance_valid(special_background):
+		special_background.position = screen_size / 2
+		if gif_size.y > 0:
+			var scale_by_height = screen_size.y / gif_size.y
+			special_background.scale = Vector2(scale_by_height, scale_by_height)
+	
 	# Parallax scrolling
 	update_parallax(delta)
 	
@@ -259,6 +299,8 @@ func start_game():
 	player.add_to_group("player")
 	player.hit.connect(_on_player_hit)
 	player.special_moves_changed.connect(_on_special_moves_changed)
+	player.special_move_started.connect(_on_special_move_started)
+	player.special_move_ended.connect(_on_special_move_ended)
 	player.reset_special_moves()
 	add_child(player)
 
@@ -331,3 +373,17 @@ func _on_player_hit():
 
 func _on_special_moves_changed(count):
 	$CanvasLayer/HUD.update_special_moves(count)
+
+func _on_special_move_started():
+	if special_background:
+		special_background.visible = true
+		if special_background is AnimatedSprite2D:
+			special_background.play()
+	$Stars.visible = false
+
+func _on_special_move_ended():
+	if special_background:
+		special_background.visible = false
+		if special_background is AnimatedSprite2D:
+			special_background.stop()
+	$Stars.visible = true

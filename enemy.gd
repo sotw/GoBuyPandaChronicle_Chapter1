@@ -101,5 +101,5 @@ func set_type(new_type):
 			max_hp = 2
 		Type.CHASER:
 			speed = 100
-			hp = 5
-			max_hp = 5
+			hp = 3
+			max_hp = 3

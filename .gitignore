@@ -1,0 +1,16 @@
+# Godot
+.godot/
+play/
+export_presets.cfg
+*.pck
+*.wasm
+*.js
+*.html
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build
+bin/
+build/

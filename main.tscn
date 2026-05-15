@@ -29,6 +29,11 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color(0.039, 0.039, 0.059, 1)
 
+[node name="SpecialBackground" type="AnimatedSprite2D" parent="." unique_id=123456793]
+visible = false
+position = Vector2(320, 180)
+scale = Vector2(0.64, 0.72)
+
 [node name="Stars" type="Node2D" parent="." unique_id=1283770602]
 
 [node name="LCDFilter" type="ColorRect" parent="." unique_id=92183070]
