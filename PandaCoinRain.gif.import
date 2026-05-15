@@ -1,0 +1,15 @@
+[remap]
+
+importer="import_gif_to_sprite_frames"
+type="SpriteFrames"
+uid="uid://r2egu2of4fqa"
+path="res://.godot/imported/PandaCoinRain.gif-448d473bd4f0bc811b65be5362afe761.tres"
+
+[deps]
+
+source_file="res://PandaCoinRain.gif"
+dest_files=["res://.godot/imported/PandaCoinRain.gif-448d473bd4f0bc811b65be5362afe761.tres"]
+
+[params]
+
+frames_per_second=30

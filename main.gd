@@ -31,17 +31,18 @@ func _ready():
 	
 	special_background = $SpecialBackground
 	
-	# Load PNG frames and create SpriteFrames at runtime
+	# Load WebP frames and create SpriteFrames at runtime
 	var frames = SpriteFrames.new()
-	frames.add_animation("default")
 	
-	var frame_dir = "res://gif_frames/"
-	var frame_num = 1
+	var frame_dir = "res://gif_frames_webp/"
+	var frame_num = 0
 	while true:
-		var frame_path = frame_dir + "frame_%03d.png" % frame_num
+		var frame_path = frame_dir + "%03d.webp" % frame_num
 		var frame_texture = load(frame_path)
 		if not frame_texture:
 			break
+		if frame_num == 0 and not frames.has_animation("default"):
+			frames.add_animation("default")
 		frames.add_frame("default", frame_texture)
 		frame_num += 1
 		if frame_num > 100:
