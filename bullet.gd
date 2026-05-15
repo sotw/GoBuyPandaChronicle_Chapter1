@@ -20,15 +20,30 @@ func _process(delta):
 		check_enemy_collisions()
 
 func check_enemy_collisions():
+	if not is_inside_tree() or is_queued_for_deletion():
+		return
+
+	var parent = get_parent()
+	if not parent or not is_instance_valid(parent):
+		return
+
 	for enemy in get_tree().get_nodes_in_group("enemies"):
-		if enemy.position.distance_to(position) < collision_radius + 15:
-			var explosion = load("res://explosion.tscn").instantiate()
-			explosion.position = enemy.position
-			get_parent().add_child(explosion)
-			match enemy.type:
-				0: get_parent().add_score(10)
-				1: get_parent().add_score(25)
-				2: get_parent().add_score(50)
-			enemy.queue_free()
-			queue_free()
+		if not is_instance_valid(enemy) or enemy.is_queued_for_deletion():
+			continue
+		if position.distance_to(enemy.position) < collision_radius + 15:
+			enemy.hp -= 1
+			if not is_queued_for_deletion():
+				queue_free()
+			if enemy.hp <= 0:
+				var explosion = load("res://explosion.tscn").instantiate()
+				explosion.position = enemy.position
+				parent.add_child(explosion)
+				match enemy.type:
+					0: parent.add_score(10)
+					1: parent.add_score(25)
+					2: parent.add_score(50)
+				if not enemy.is_queued_for_deletion():
+					enemy.queue_free()
+			else:
+				enemy.flash_effect()
 			return

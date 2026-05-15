@@ -27,15 +27,15 @@ func _ready():
 
 func _process(delta):
 	var velocity = Vector2.ZERO
-	
+
 	if is_touching and target_position != Vector2.ZERO:
 		var direction = target_position - position
 		if direction.length() > 5:
 			velocity = direction.normalized() * speed
-			if can_shoot and is_touching:
-				shoot_bullet()
-				can_shoot = false
-				get_tree().create_timer(shoot_delay).timeout.connect(_on_shoot_ready)
+		if can_shoot and is_touching and visible:
+			shoot_bullet()
+			can_shoot = false
+			get_tree().create_timer(shoot_delay).timeout.connect(_on_shoot_ready)
 	elif Input.is_key_pressed(KEY_LEFT) or Input.is_key_pressed(KEY_A):
 		velocity.x -= 1
 	elif Input.is_key_pressed(KEY_RIGHT) or Input.is_key_pressed(KEY_D):
@@ -58,7 +58,7 @@ func _process(delta):
 	position.x = clamp(position.x, 20, screen_size.x - 20)
 	position.y = clamp(position.y, 20, screen_size.y - 20)
 	
-	if Input.is_key_pressed(KEY_SPACE) and can_shoot:
+	if Input.is_key_pressed(KEY_SPACE) and can_shoot and visible:
 		shoot_bullet()
 		can_shoot = false
 		get_tree().create_timer(shoot_delay).timeout.connect(_on_shoot_ready)
